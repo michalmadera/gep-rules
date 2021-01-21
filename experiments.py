@@ -67,9 +67,9 @@ def point_mutation(genome):
                 bit = selection[np.random.randint(0, len(selection))]
             else:
                 bit = terms[np.random.randint(0, len(terms))]
-            print(bit)
         child.append(bit)
-    return ''.join(child)
+    s = ''.join(child)
+    return s
 
 
 def genome_to_program(genome, functions):
@@ -79,45 +79,70 @@ def genome_to_program(genome, functions):
 def fitness_function(expected_values, program):
     return np.mean(abs(expected_values - eval(program)))
 
-                   
-data_size = 100
-data = pd.DataFrame({'a': np.random.rand(data_size), 'b': np.random.rand(data_size)})
-data['y'] = data.a + (data.b * data.a)
 
-terms = ['a', 'b']
-functions = ['*', '+']
-head_size = 10
-tail_size = head_size * len(terms) + 1
-population_size = 10
+def calculate_fitness(group):
+    group['program'] = group.apply(lambda x: genome_to_program(x['genome'], functions), axis=1)
+    group['fitness'] = group.apply(lambda x: fitness_function(data.y, x.program), axis=1)
 
-number_of_generations = 10
 
-population = pd.DataFrame([random_genome(head_size, tail_size, terms, functions) for _ in range(population_size)], columns=['genome'])
-population['program'] = population.apply(lambda x: genome_to_program(x['genome'], functions), axis=1)
-population['fitness'] = population.apply(lambda x: fitness_function(data.y, x.program), axis=1)
-for _ in range(number_of_generations):
-    # selected = binary_tournamen -> wybieraj 2 osobniki losowo i zwracaj lepszy. tyle raz ile osobników. rodzaj selekcji inny niz ruletka
-    random_selection = np.random.randint(0, population_size, population_size)
-    selected = population.apply(lambda x: (
-        x if x.fitness < population.iloc[random_selection[x.name]].fitness 
-        else population.iloc[random_selection[x.name]]), axis=1)
-    
-    # children = reporuction -> wybierz pary co drugi i zrob krzyzowanie z mutacja punktowa
-    # wybierz pary
-    random_selection = np.random.randint(0, population_size, population_size)
-    # corssover
+def initialize_population():
+    return pd.DataFrame([random_genome(head_size, tail_size, terms, functions) for _ in range(population_size)], columns=['genome'])
+
+
+def select_by_binary_tournament(group):
+    random_selection = np.random.randint(0, len(group), len(group)) 
+    return group.apply(lambda x: (
+        x if x.fitness < group.iloc[random_selection[x.name]].fitness 
+        else group.iloc[random_selection[x.name]]), axis=1)
+
+
+def replicate(selected):
+    random_selection = np.random.randint(0, len(selected), len(selected))
     crossed = selected.copy()
-    crossed.genome = selected.apply(lambda x: crossover(x.genome, 
-                                                        selected.iloc[random_selection[x.name]].genome, 0.85), axis=1)
-    crossed['fitness'] = crossed.apply(lambda x: fitness_function(data.y, x.program), axis=1)
+    crossed.genome = selected.apply(lambda x: point_mutation(crossover(x.genome, 
+                                                       selected.iloc[random_selection[x.name]].genome, 0.85)), axis=1)
 
-    population = population.append(crossed, ignore_index=True).sort_values('fitness')[:population_size]
+    calculate_fitness(crossed)
+    return crossed
+
+
+def best_of_population(selected, crossed):
+    population = selected.append(crossed, ignore_index=True).sort_values('fitness')[:population_size]
     population.index = range(0,len(population))
+    return population
+
+
+data_size = 1000
+data = pd.DataFrame({'a': np.random.rand(data_size), 
+                     'b': np.random.rand(data_size)})
+
+
+data['y'] = data.a + (data.a * data.b)
+
+terms = list(data.columns[:-1])
+functions = ['*', '+']
+head_size = 20
+tail_size = head_size * len(terms) + 1
+population_size = 30
+
+number_of_generations = 200
+ 
+
+population = initialize_population()
+
+calculate_fitness(population)
+
+for generation in range(number_of_generations):
+
+    selected = select_by_binary_tournament(population)
+    crossed = replicate(selected)
+    population = best_of_population(selected, crossed)    
     
-    print(population[['fitness', 'program']])
-    # krzyzowanie stosuj tylko w 85% przypadków, a dla 15% zwracaj rodzica pierwszego
-    # krzyzowanie powinno wybierać losowe znaki z jednego lub drugiego rodzica
-    # mutacja punktowa przeprowadzana jest po krzyzowaniu
-    # wybranie najlepszego osobnika i jeżeli fitness jest = 0 zakończyć algorytm
-    # zebrać na jednej liscie rodzicow i dzieci, posortowac po fitness, wybrac pierwsze osobniki (do ilosci z populacji)
-    # jezeli liczba generacji nie zostala przekroczona kontynuowac kolejne pokolenie
+    if min(population['fitness']) == 0:
+        break
+
+
+print(generation, 
+          population.sort_values('fitness').iloc[0].fitness, 
+          population.sort_values('fitness').iloc[0].program)
+
