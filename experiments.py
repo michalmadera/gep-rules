@@ -96,19 +96,51 @@ def select_by_binary_tournament(group):
         else group.iloc[random_selection[x.name]]), axis=1)
 
 
+def reverse_fitness(group):
+    """ only until the method of calculating fitness is changed """
+    max_fitness = group['fitness'].max()
+    min_fitness = group['fitness'].min()
+    reverse_fitness = list()
+    for f in group['fitness']:
+        reverse_fitness.append(min_fitness + max_fitness - f)
+    group['reversed fitness'] = reverse_fitness
+
+
+def determine_probability(group):
+    reverse_fitness(group)
+    group.sort_values('reversed fitness', inplace=True)
+    sum_fitness = group['reversed fitness'].sum()
+    probability = 0.0
+    probabilities = list()
+    for x in group['reversed fitness']:
+        probability = probability + (x / sum_fitness)
+        probabilities.append(probability)
+    group['probability'] = probabilities
+
+
+def select_by_roulette_wheel(group):
+    determine_probability(group)
+    random_selection = np.random.rand(len(group))
+    selected = list()
+    for rand in random_selection:
+        for i, probability in enumerate(group['probability']):
+            if rand < probability:
+                selected.append(i)
+                break
+    return group.iloc[selected]
+
+
 def replicate(selected):
     random_selection = np.random.randint(0, len(selected), len(selected))
     crossed = selected.copy()
     crossed.genome = selected.apply(lambda x: point_mutation(crossover(x.genome, 
                                                        selected.iloc[random_selection[x.name]].genome, 0.85)), axis=1)
-
-    calculate_fitness(crossed)
     return crossed
 
 
 def best_of_population(selected, crossed):
     population = selected.append(crossed, ignore_index=True).sort_values('fitness')[:population_size]
-    population.index = range(0,len(population))
+    population.index = range(0, len(population))
     return population
 
 
@@ -130,19 +162,14 @@ number_of_generations = 200
 
 population = initialize_population()
 
-calculate_fitness(population)
-
 for generation in range(number_of_generations):
-
-    selected = select_by_binary_tournament(population)
-    crossed = replicate(selected)
-    population = best_of_population(selected, crossed)    
-    
+    calculate_fitness(population)
     if min(population['fitness']) == 0:
         break
+    selected = select_by_roulette_wheel(population)
+    population = replicate(selected)
+    # population = best_of_population(selected, crossed)
 
 
-print(generation, 
-          population.sort_values('fitness').iloc[0].fitness, 
-          population.sort_values('fitness').iloc[0].program)
+print(generation, population.sort_values('fitness').iloc[0].fitness, population.sort_values('fitness').iloc[0].program)
 
