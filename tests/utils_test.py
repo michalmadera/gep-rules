@@ -1,4 +1,3 @@
-from utils import *
 
 
 def test_tree_to_string():
