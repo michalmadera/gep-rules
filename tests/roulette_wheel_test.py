@@ -1,30 +1,30 @@
 import pandas as pd
 
-from experiments import determine_probability, select_by_roulette_wheel
+from selection import select_by_roulette_wheel, __determine_probability
 
 
 def test_determine_probability():
     group = pd.DataFrame({'fitness': [1, 2, 3, 4, 7], 'id': ['A', 'B', 'C', 'D', 'E']})
-    determine_probability(group)
+    __determine_probability(group)
     assert list(group['probability']) == [0.043478260869565216, 0.21739130434782608, 0.43478260869565216, 0.6956521739130435, 1.0]
     assert list(group['id']) == ['E', 'D', 'C', 'B', 'A']
 
     group = pd.DataFrame({'fitness': [7, 4, 3, 2, 1], 'id': ['A', 'B', 'C', 'D', 'E']})
-    determine_probability(group)
+    __determine_probability(group)
     assert list(group['probability']) == [0.043478260869565216, 0.21739130434782608, 0.43478260869565216, 0.6956521739130435, 1.0]
     assert list(group['id']) == ['A', 'B', 'C', 'D', 'E']
 
     group = pd.DataFrame({'fitness': [0.25, 1.1, 0.08, 0.99, 1.6], 'id': ['A', 'B', 'C', 'D', 'E']})
-    determine_probability(group)
+    __determine_probability(group)
     assert list(group['probability']) == [0.018264840182648415, 0.1506849315068493, 0.3082191780821918, 0.634703196347032, 1.0]
     assert list(group['id']) == ['E', 'B', 'D', 'A', 'C']
 
     group = pd.DataFrame({'fitness': [1]})
-    determine_probability(group)
+    __determine_probability(group)
     assert list(group['probability']) == [1.0]
 
     group = pd.DataFrame({'fitness': []})
-    determine_probability(group)
+    __determine_probability(group)
     assert list(group['probability']) == []
 
 
