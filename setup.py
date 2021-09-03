@@ -8,7 +8,7 @@ head_size = 20
 tail_size = head_size * len(terms) + 1
 
 population_size = 30
-max_number_of_populations = 200
+max_number_of_cycles = 500
 
 data_size = 1000
 

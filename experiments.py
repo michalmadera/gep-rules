@@ -13,7 +13,7 @@ from setup import *
 samples = initialize_sample("a + (a * b)")
 population = initialize_population()
 
-for generation in range(max_number_of_populations):
+for generation in range(max_number_of_cycles):
     calculate_fitness(population, samples)
     if min(population['fitness']) == 0:
         break
