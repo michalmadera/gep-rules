@@ -14,12 +14,12 @@ def __reverse_fitness(population):
 
 
 def __determine_probability(population):
-    __reverse_fitness(population)
-    population.sort_values('reversed fitness', inplace=True)
-    sum_fitness = population['reversed fitness'].sum()
+    # __reverse_fitness(population)
+    population.sort_values('fitness', inplace=True)
+    sum_fitness = population['fitness'].sum()
     probability = 0.0
     probabilities = list()
-    for x in population['reversed fitness']:
+    for x in population['fitness']:
         probability = probability + (x / sum_fitness)
         probabilities.append(probability)
     population['probability'] = probabilities
@@ -32,7 +32,8 @@ def select_by_roulette_wheel(population, debug=False):
     selected = list()
     population.sort_values('probability', inplace=True)
     if debug:
-        print(population)
+        for i, ind in population.iterrows():
+            print(str(i), ind.genome, ind.program.replace('data.', ''), str(int(ind.fitness)), str(round(ind.probability, 4)))
     for rand in random_selection:
         for i, probability in enumerate(population['probability']):
             if rand < probability:
@@ -41,7 +42,6 @@ def select_by_roulette_wheel(population, debug=False):
     result = population.iloc[selected]
     if debug:
         print(selected)
-        print(result)
     return result
 
 

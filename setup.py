@@ -4,10 +4,10 @@ import numpy as np
 terms = ['a', 'b', 'c']
 functions = ['*', '+']
 
-head_size = 10
+head_size = 5
 tail_size = head_size * len(terms) + 1
 
-population_size = 10
+population_size = 30
 max_number_of_cycles = 100
 
 data_size = 100

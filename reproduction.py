@@ -37,7 +37,7 @@ def __point_mutation(population, m_rate=0.1, debug=False):
                     bit = selection[np.random.randint(0, len(selection))]
                 else:
                     bit = terms[np.random.randint(0, len(terms))]
-                changed.append(str(ind) + ": " + genome[ind] + "=>" + bit)
+                changed.append(str(ind) + ": " + genome[ind] + ">" + bit)
             new_genome.append(bit)
         population.iloc[i, population.columns.get_loc('genome')] = ''.join(new_genome)
         if debug and len(changed) > 0:
@@ -60,7 +60,7 @@ def __is_transposition(population, t_rate=0.1, debug=False):
                       population.iloc[i, population.columns.get_loc('genome')])
 
 
-def __ris_transposition(population, t_rate=0.5, debug=False):
+def __ris_transposition(population, t_rate=0.1, debug=False):
     for i, individual in population.iterrows():
         if np.random.random() < t_rate:
             size = np.random.randint(1, 4)
