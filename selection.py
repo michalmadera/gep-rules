@@ -25,16 +25,28 @@ def __determine_probability(population):
     population['probability'] = probabilities
 
 
-def select_by_roulette_wheel(population):
+def select_by_roulette_wheel(population, debug=False):
     """https://en.wikipedia.org/wiki/Fitness_proportionate_selection"""
     __determine_probability(population)
     random_selection = np.random.rand(len(population))
     selected = list()
+    population.sort_values('probability', inplace=True)
+    if debug:
+        print(population)
     for rand in random_selection:
         for i, probability in enumerate(population['probability']):
             if rand < probability:
                 selected.append(i)
                 break
+    result = population.iloc[selected]
+    if debug:
+        print(selected)
+        print(result)
+    return result
+
+
+def select_by_random(population):
+    selected = np.random.choice(population_size, population_size)
     return population.iloc[selected]
 
 

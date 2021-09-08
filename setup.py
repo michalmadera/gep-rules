@@ -1,16 +1,16 @@
 import pandas as pd
 import numpy as np
 
-terms = ['a', 'b']
+terms = ['a', 'b', 'c']
 functions = ['*', '+']
 
 head_size = 10
 tail_size = head_size * len(terms) + 1
 
-population_size = 30
-max_number_of_cycles = 50
+population_size = 10
+max_number_of_cycles = 100
 
-data_size = 1000
+data_size = 100
 
 
 def __random_genome():
