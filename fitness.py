@@ -10,6 +10,8 @@ def __fitness_m(program, data):
 
 def __fitness_rse(program, data):
     # Fitness function: relative mean squared error
+    cols = data.columns[:-1]
+    
     guess = eval(program)
     error = sum([pow((guess[i] - data.y[i]) / data.y[i], 2) for i in range(len(data.y))])
     return 1000 * (1 / (1 + (error / data_size)))

@@ -8,7 +8,7 @@ head_size = 10
 tail_size = head_size * len(terms) + 1
 
 population_size = 30
-max_number_of_cycles = 500
+max_number_of_cycles = 50
 
 data_size = 100
 
@@ -33,6 +33,6 @@ def initialize_sample(formula):
     for term in terms:
         data[term] = np.random.rand(data_size)
         formula = formula.replace(term, 'data.' + term)
-
+        
     data['y'] = eval(formula)
     return data

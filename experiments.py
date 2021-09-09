@@ -12,13 +12,14 @@ def experiment(samples):
 
     for generation in range(max_number_of_cycles):
         calculate_fitness(population, samples)
-        if max(population.fitness) >= 1000 or generation == max_number_of_cycles - 1:
+        if max(population.fitness) >= 1001 or generation == max_number_of_cycles - 1:
             break
         population = select_by_roulette_wheel(population, debug=False)
         population = reproduction(population, debug=False)
 
     best = population.sort_values('fitness').iloc[len(population) - 1]
     print(generation, int(best.fitness), best.program.replace('data.', ''))
+    return generation
 
 
 # experiment(initialize_sample("c + (a * b)"))
