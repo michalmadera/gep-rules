@@ -4,7 +4,8 @@ from setup import population_size
 
 
 def __reverse_fitness(population):
-    """ only until the method of calculating fitness is changed """
+    """DEPRECATED
+    only until the method of calculating fitness is changed """
     max_fitness = population['fitness'].max()
     min_fitness = population['fitness'].min()
     reverse_fitness = list()
@@ -14,7 +15,6 @@ def __reverse_fitness(population):
 
 
 def __determine_probability(population):
-    # __reverse_fitness(population)
     population.sort_values('fitness', inplace=True)
     sum_fitness = population['fitness'].sum()
     probability = 0.0
@@ -31,16 +31,19 @@ def select_by_roulette_wheel(population, debug=False):
     random_selection = np.random.rand(len(population))
     selected = list()
     population.sort_values('probability', inplace=True)
+
     if debug:
         print("===== selection =====")
         for i, ind in population.iterrows():
             print(str(i), ind.genome, str(int(ind.fitness)), str(round(ind.probability, 4)), ind.program.replace('data.', ''))
+
     for rand in random_selection:
         for i, probability in enumerate(population['probability']):
             if rand < probability:
                 selected.append(i)
                 break
     result = population.iloc[selected]
+
     if debug:
         print(selected)
         for i, ind in result.iterrows():
