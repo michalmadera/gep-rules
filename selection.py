@@ -32,8 +32,9 @@ def select_by_roulette_wheel(population, debug=False):
     selected = list()
     population.sort_values('probability', inplace=True)
     if debug:
+        print("===== selection =====")
         for i, ind in population.iterrows():
-            print(str(i), ind.genome, ind.program.replace('data.', ''), str(int(ind.fitness)), str(round(ind.probability, 4)))
+            print(str(i), ind.genome, str(int(ind.fitness)), str(round(ind.probability, 4)), ind.program.replace('data.', ''))
     for rand in random_selection:
         for i, probability in enumerate(population['probability']):
             if rand < probability:
@@ -42,6 +43,9 @@ def select_by_roulette_wheel(population, debug=False):
     result = population.iloc[selected]
     if debug:
         print(selected)
+        for i, ind in result.iterrows():
+            print(str(i), ind.genome, str(int(ind.fitness)), str(round(ind.probability, 4)), ind.program.replace('data.', ''))
+        print("===== end =====")
     return result
 
 

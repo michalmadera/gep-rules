@@ -7,8 +7,8 @@ functions = ['*', '+']
 head_size = 5
 tail_size = head_size * len(terms) + 1
 
-population_size = 30
-max_number_of_cycles = 100
+population_size = 10
+max_number_of_cycles = 500
 
 data_size = 100
 
