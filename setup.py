@@ -4,7 +4,7 @@ import numpy as np
 terms = ['a', 'b', 'c']
 functions = ['*', '+']
 
-head_size = 20
+head_size = 30
 tail_size = head_size * len(terms) + 1
 
 population_size = 20
@@ -42,7 +42,7 @@ def initialize_sample_file(formula, terms, data_size):
     data = pd.DataFrame()
     for term in terms:
         data[term] = np.random.rand(data_size)
-        formula = formula.replace(term, 'data.' + term).replace('data.data.', 'data.')
+        formula = formula.replace(term, 'data.' + term).replace('data.data.', 'data.').replace('dadata.ta.', 'data.')
 
     data['y'] = eval(formula)
     return data
@@ -54,7 +54,7 @@ def initialize_sample_file(formula, terms, data_size):
 # d = initialize_sample_file("(a * b) + c", ["a", "b", "c", "d"], 100_000)
 # d.to_csv("data/sample_4.csv", index=False, columns=["a", "b", "c", "d", "y"])
 
-# d = initialize_sample_file("((a * b) + (c * d) * e)", ["a", "b", "c", "d", "e"], 100_000)
+# d = initialize_sample_file("(a * b) + c", ["a", "b", "c", "d", "e"], 100_000)
 # d.to_csv("data/sample_5.csv", index=False, columns=["a", "b", "c", "d", "e", "y"])
 
 # d = initialize_sample_file("((a * b) + (c * d) + (e * f))", ["a", "b", "c", "d", "e", "f"], 100_000)
@@ -71,3 +71,9 @@ def initialize_sample_file(formula, terms, data_size):
 
 # d = initialize_sample_file("(a * b) + c", ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"], 100_000)
 # d.to_csv("data/sample_10.csv", index=False, columns=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "y"])
+
+# d = initialize_sample_file("(a * b) + c", ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o"], 100_000)
+# d.to_csv("data/sample_15.csv", index=False, columns=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "y"])
+
+# d = initialize_sample_file("(a * b) + c", ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u"], 100_000)
+# d.to_csv("data/sample_20.csv", index=False, columns=["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "r", "s", "t", "u", "y"])

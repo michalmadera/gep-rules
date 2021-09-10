@@ -18,26 +18,25 @@ def scenario(file, size, tensor=True):
 
 def run_experiment(tensor=True):
     results = pd.DataFrame()
-    # cols_exp = [3, 4, 5, 6, 7, 8, 9, 10]
-    # rows_exp = [100, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000]
-    cols_exp = [4, 7, 10]
-    rows_exp = [100, 500, 1000, 5000, 10_000]
+    cols_exp = [5, 10, 15, 20]
+    rows_exp = [100, 2500, 5000, 7500, 10_000]
 
     i = 0
     for ncols in cols_exp:
+        print(ncols)
         for nrows in rows_exp:
+            print(nrows)
             for ret in range(5):
                 duration, generations = scenario('data/sample_' + str(ncols) + '.csv', nrows, tensor)
                 results = results.append({'i': ret, 'nrows': nrows, 'ncols': ncols, 'generations': generations,
                                           'duration': duration}, ignore_index=True)
                 i = i + 1
                 print('run', duration, generations, i, '/', len(cols_exp) * len(rows_exp) * 5)
-        print(nrows)
 
     if tensor:
-        results.to_excel('result/experiment_results_tensor_f.xlsx')
+        results.to_excel('result/experiment_results_tensor_f1.xlsx')
     else:
-        results.to_excel('result/experiment_results_f.xlsx')
+        results.to_excel('result/experiment_results_f1.xlsx')
 
     
 run_experiment(False)

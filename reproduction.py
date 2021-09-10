@@ -32,7 +32,7 @@ def __point_mutation(genome, m_rate=0.05, debug=False):
         bit = genome[ind]
         if np.random.random() < m_rate:
             if ind < head_size:
-                selection = functions if np.random.random() < 0.6 else terms
+                selection = functions if np.random.random() < 0.5 else terms
                 bit = selection[np.random.randint(0, len(selection))]
             else:
                 bit = terms[np.random.randint(0, len(terms))]
