@@ -30,6 +30,9 @@ def __fitness_rse_tensor(program, d):
     return 1000 * (1 / (1 + (error / data_size)))
 
 
-def calculate_fitness(population, data):
+def calculate_fitness(population, data, tensor=True):
     population['program'] = population.apply(lambda x: genome_to_program(x.genome), axis=1)
-    population['fitness'] = population.apply(lambda x: __fitness_rse_tensor(x.program, data), axis=1)
+    if tensor:
+        population['fitness'] = population.apply(lambda x: __fitness_rse_tensor(x.program, data), axis=1)
+    else:
+        population['fitness'] = population.apply(lambda x: __fitness_rse(x.program, data), axis=1)
