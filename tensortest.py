@@ -7,25 +7,27 @@ Created on Thu Sep  9 20:09:45 2021
 import tensorflow as tf
 import pandas as pd
 
-a = tf.constant([1,2,3])
-b = tf.constant([4,5,6])
+# a = tf.constant([1,2,3])
+# b = tf.constant([4,5,6])
 
 df = pd.DataFrame({'a':[1,2,3], 'b':[4,5,6]})
 
 
-data = pd.DataFrame()
-col = 'a'
-x = tf.constant(df[col].values)
+data = dict()
+# col = 'a'
+# x = tf.constant(df[col].values)
 
 for col in df.columns:
     x = tf.constant(df[col].values)
-    print(x)
-    data = data.append({""+col:x},ignore_index=True)
+    data[str(col)] = x
 
-data = [tf.constant([1,2,3]), tf.constant([4,5,6])]
+a = tf.constant(df['a'].values)
+b = tf.constant(df['b'].values)
+# data = [tf.constant([1,2,3]), tf.constant([4,5,6])]
+#
+# df.columns.get_loc('b')
 
-df.columns.get_loc('b')
-
-print('aaaa', eval("data[df.columns.get_loc('a')] * data[df.columns.get_loc('b')]"))
+e = eval("data['a'] * data['b']")
+print(eval("data.a * data.b"))
 
 

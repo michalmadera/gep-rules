@@ -18,7 +18,7 @@ def experiment(samples):
         population = reproduction(population, debug=False)
 
     best = population.sort_values('fitness').iloc[len(population) - 1]
-    print(generation, int(best.fitness), best.program.replace('data.', ''))
+    # print(generation, int(best.fitness), best.program.replace('data.', ''))
     return generation
 
 
