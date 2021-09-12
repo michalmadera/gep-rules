@@ -13,6 +13,7 @@ The ultimate goal is to implement complete framework for fast fuzzy rules genera
 ## Usage
 
 - Configure data and algorithm paremeters in *setup.py* file.
-- Optionally use *scenarios.py* to prepare new experiments.
-- Execute experiments running *experiments.py* file.
+- Using *setup.py* new experiments can be created - see commented bottom lines.
+- Execute experiments running *scenario.py* file.
+- Optionally, instant experiment can be run from *experiments.py* file.
 
