@@ -11,14 +11,14 @@ def __fitness_m(program, data):
 
 
 def __fitness_rse(program, data):
-    # Fitness function: relative mean squared error
+    # Fitness function: mean absolute percentage error
     guess = eval(program)
     error = sum([pow((guess[i] - data.y[i]) / data.y[i], 2) for i in range(len(data.y))])
     return 1000 * (1 / (1 + (error / data_size)))
 
 
 def __fitness_rse_tensor(program, d):
-    # Fitness function: relative mean squared error
+    # Fitness function: mean absolute percentage error
     data = dict()
     for col in d.columns:
         data[str(col)] = tf.constant(d[col].values)
